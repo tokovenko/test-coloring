@@ -45,6 +45,9 @@ var routes = [{
         path: '',
         component: _list_item_list_item_component__WEBPACK_IMPORTED_MODULE_3__["ListItemComponent"]
     }, {
+        path: 'index3.html',
+        component: _list_item_list_item_component__WEBPACK_IMPORTED_MODULE_3__["ListItemComponent"]
+    }, {
         path: 'coloring/:alias',
         component: _list_item_list_item_component__WEBPACK_IMPORTED_MODULE_3__["ListItemComponent"]
     }];
