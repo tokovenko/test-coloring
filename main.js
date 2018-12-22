@@ -571,7 +571,7 @@ var ListItemComponent = /** @class */ (function () {
     ListItemComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.sub = this.route.params.subscribe(function (params) {
-            _this.alias = 'coloring-1'; // params['alias'];
+            _this.alias = 'coloring-2'; // params['alias'];
             _this.coloringService.getList()
                 .subscribe(function (list) {
                 _this.item = list.find(function (item) { return item.alias === _this.alias; });
@@ -743,7 +743,7 @@ module.exports = "\n  <!-- <div style=\"position: fixed; top: 100px; left: 0; ri
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "svg {\n  touch-action: auto;\n  position: absolute; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9ldG9rb3ZlbmtvL0Rlc2t0b3AvcHJvamVjdHMvY29sb3ItYXBwL3NyYy9hcHAvc3ZnL3N2Zy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLG1CQUFrQjtFQUNsQixtQkFBa0IsRUFDckIiLCJmaWxlIjoic3JjL2FwcC9zdmcvc3ZnLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsic3ZnIHtcbiAgICB0b3VjaC1hY3Rpb246IGF1dG87XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xufSJdfQ== */"
+module.exports = ".coloring-wrapper {\n  touch-action: auto;\n  position: absolute; }\n\nsvg g {\n  position: absolute;\n  z-index: 1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9ldG9rb3ZlbmtvL0Rlc2t0b3AvcHJvamVjdHMvY29sb3ItYXBwL3NyYy9hcHAvc3ZnL3N2Zy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLG1CQUFrQjtFQUNsQixtQkFBa0IsRUFDckI7O0FBRUQ7RUFFUSxtQkFBa0I7RUFDbEIsV0FBVSxFQUNiIiwiZmlsZSI6InNyYy9hcHAvc3ZnL3N2Zy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jb2xvcmluZy13cmFwcGVyIHtcbiAgICB0b3VjaC1hY3Rpb246IGF1dG87XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xufVxuXG5zdmcge1xuICAgIGcge1xuICAgICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgICAgIHotaW5kZXg6IDE7XG4gICAgfVxufSJdfQ== */"
 
 /***/ }),
 
@@ -791,318 +791,270 @@ var SvgComponent = /** @class */ (function () {
         this.e = { test: 1 };
         this.deltaX = 0;
         this.deltaY = 0;
+        this.isVisibleLog = false;
+        this.logs = [];
     }
+    SvgComponent.prototype.toggleLog = function () {
+        this.isVisibleLog = !this.isVisibleLog;
+    };
+    SvgComponent.prototype.clearLog = function () {
+        this.logs = [];
+    };
     SvgComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.myTemplate.nativeElement.innerHTML = this.svg;
-        this.groups = Array.from(this.myTemplate.nativeElement.querySelectorAll('svg>g'));
-        this.color = 'red';
-        this.group = null;
-        var width = this.width = this.maxWidth;
-        var height = this.height = this.maxHeight;
-        var deltaX = 0;
-        var deltaY = 0;
-        this.width = this.maxWidth;
-        this.height = this.maxHeight;
-        // this.width = 1517;
-        // this.height = 2266;
-        // this.deltaX = -816;
-        // this.deltaY = -430;
-        var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#coloring svg');
-        var svg1 = this.myTemplate.nativeElement.querySelector('svg');
-        var element = svg1;
-        var hammertime = new hammerjs__WEBPACK_IMPORTED_MODULE_3__(element, {});
-        hammertime.get('pinch').set({ enable: true });
-        hammertime.get('pan').set({ threshold: 0 });
-        var pinchStart = { x: null, y: null };
-        var lastEvent = null;
-        var originalSize = {
-            width: 200,
-            height: 300
-        };
-        var current = {
-            x: 0,
-            y: 0,
-            z: 1,
-            zooming: false,
-            width: originalSize.width * 1,
-            height: originalSize.height * 1,
-        };
-        var last = {
-            x: current.x,
-            y: current.y,
-            z: current.z
-        };
-        function getRelativePosition(el, point, oSize, scale) {
-            var domCoords = getCoords(el);
-            var elementX = point.x - domCoords.x;
-            var elementY = point.y - domCoords.y;
-            var relativeX = elementX / (oSize.width * scale / 2) - 1;
-            var relativeY = elementY / (oSize.height * scale / 2) - 1;
-            return { x: relativeX, y: relativeY };
-        }
-        function getCoords(elem) {
-            var box = elem.getBoundingClientRect();
-            var body = document.body;
-            var docEl = document.documentElement;
-            var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-            var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-            var clientTop = docEl.clientTop || body.clientTop || 0;
-            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-            var top = box.top + scrollTop - clientTop;
-            var left = box.left + scrollLeft - clientLeft;
-            return { x: Math.round(left), y: Math.round(top) };
-        }
-        function scaleFrom(zoomOrigin, cScale, newScale) {
-            var currentShift = getCoordinateShiftDueToScale(originalSize, cScale);
-            var newShift = getCoordinateShiftDueToScale(originalSize, newScale);
-            var zoomDistance = newScale - cScale;
-            var shift = {
-                x: currentShift.x - newShift.x,
-                y: currentShift.y - newShift.y,
-            };
-            var output = {
-                x: zoomOrigin.x * shift.x,
-                y: zoomOrigin.y * shift.y,
-                z: zoomDistance
-            };
-            return output;
-        }
-        function getCoordinateShiftDueToScale(size, scale) {
-            var newWidth = scale * size.width;
-            var newHeight = scale * size.height;
-            var dx = (newWidth - size.width) / 2;
-            var dy = (newHeight - size.height) / 2;
-            return {
-                x: dx,
-                y: dy
-            };
-        }
-        hammertime.on('doubletap', function (e) {
-            var scaleFactor = 1;
-            if (current.zooming === false) {
-                current.zooming = true;
-            }
-            else {
-                current.zooming = false;
-                scaleFactor = -scaleFactor;
-            }
-            element.style.transition = '0.3s';
-            setTimeout(function () {
-                element.style.transition = 'none';
-            }, 300);
-            var zoomOrigin = getRelativePosition(element, { x: e.center.x, y: e.center.y }, originalSize, current.z);
-            var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor);
-            current.x += d.x;
-            current.y += d.y;
-            current.z += d.z;
-            last.x = current.x;
-            last.y = current.y;
-            last.z = current.z;
-            update();
-        });
-        hammertime.on('pinch', function (e) {
-            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale);
-            current.x = d.x + last.x + e.deltaX;
-            current.y = d.y + last.y + e.deltaY;
-            current.z = d.z + last.z;
-            lastEvent = 'pinch';
-            update();
-        });
-        var pinchZoomOrigin = null;
-        hammertime.on('pinchstart', function (e) {
-            pinchStart.x = e.center.x;
-            pinchStart.y = e.center.y;
-            pinchZoomOrigin = getRelativePosition(element, { x: pinchStart.x, y: pinchStart.y }, originalSize, current.z);
-            lastEvent = 'pinchstart';
-        });
-        hammertime.on('pinchend', function (e) {
-            last.x = current.x;
-            last.y = current.y;
-            last.z = current.z;
-            lastEvent = 'pinchend';
-        });
-        function update() {
-            current.height = originalSize.height * current.z;
-            current.width = originalSize.width * current.z;
-            element.style.transform = 'translate3d(' + current.x + 'px, ' + current.y + 'px, 0) scale(' + current.z + ')';
-        }
-        //     svg1.style.transform = `translate3d(${this.deltaX}px, ${this.deltaY}px, 0)`;
-        //     // svg1.style.height = `${this.maxHeight}px`;
-        //     // svg1.style.width = `${this.maxWidth}px`;
-        //     this.zone.runOutsideAngular(() => {
-        //       const hammer = new Hammer(this.el.nativeElement);
-        //       let requestID;
-        //       const requestAnimationFrame = window.requestAnimationFrame || (<any>window).mozRequestAnimationFrame ||
-        //                             window.webkitRequestAnimationFrame || (<any>window).msRequestAnimationFrame;
-        //       const cancelAnimationFrame = window.cancelAnimationFrame || (<any>window).mozCancelAnimationFrame;
-        //       function step(timestamp) {
-        //         this.zone.runOutsideAngular(() => {
-        //           console.log('requestAnimationFrame');
-        //           svg1.style.height = `${height}px`;
-        //           svg1.style.width = `${width}px`;
-        //           svg1.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        //           requestID = requestAnimationFrame(step.bind(this));
-        //         });
-        //       }
-        //       hammer.on('pinchstart', () => {
-        //         this.zone.runOutsideAngular(() => {
-        //         requestID = requestAnimationFrame(step.bind(this));
-        //         });
-        //       });
-        //       hammer.on('pinchmove', throttle((e) => {
-        //         this.zone.runOutsideAngular(() => {
-        //         console.log('pinch');
-        //         this.e = e;
-        //         const offset = Math.floor((e.scale - 1) * 200);
-        //         console.log('touchmove:offset ', offset);
-        //         height = this.height + offset;
-        //         const viewBox = svg.attr('viewBox').split(' ');
-        //         const [w, h] = viewBox.slice(2);
-        //         const ratio = +h / +w;
-        //         width = Math.floor(height / ratio);
-        //         deltaX = this.deltaX + e.deltaX;
-        //         deltaY = this.deltaY + e.deltaY;
-        //         });
-        //         // svg
-        //         //   .attr('width', width)
-        //         //   .attr('height', height)
-        //         //   .attr('transform', `translate(${deltaX}, ${deltaY})`);
-        //       }, 100));
-        //       // let wheelTimerId;
-        //       // svg1.addEventListener('wheel', (e) => {
-        //       //   if (!requestID) {
-        //       //     this.zone.runOutsideAngular(() => {
-        //       //       requestID = requestAnimationFrame(step.bind(this));
-        //       //       });
-        //       //   }
-        //       //   const offset = e.deltaY;
-        //       //   console.log('touchmove:offset ', offset);
-        //       //   height = height - offset;
-        //       //   const viewBox = svg.attr('viewBox').split(' ');
-        //       //   const [w, h] = viewBox.slice(2);
-        //       //   const ratio = +h / +w;
-        //       //   width = Math.floor(height / ratio);
-        //       //   deltaX = this.deltaX + e.deltaX;
-        //       //   deltaY = this.deltaY + e.deltaY;
-        //       //   clearTimeout(wheelTimerId);
-        //       //   wheelTimerId = setTimeout(() => {
-        //       //     this.width = width;
-        //       //     this.height = height;
-        //       //     this.deltaX = deltaX;
-        //       //     this.deltaY = deltaY;
-        //       //     cancelAnimationFrame(requestID);
-        //       //     requestID = null;
-        //       //   }, 1000);
-        //       // });
-        //       hammer.on('pinchend', () => {
-        //           this.width = width;
-        //           this.height = height;
-        //           this.deltaX = deltaX;
-        //           this.deltaY = deltaY;
-        //           cancelAnimationFrame(requestID);
-        //           requestID = null;
-        //       });
-        //       hammer.get('pinch').set({ enable: true });
-        var defs = svg1.querySelector('svg>defs');
-        if (!defs) {
-            defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            svg1.append(defs);
-        }
-        this.groups.forEach(function (g, index) {
-            var clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-            clipPath.id = "clipPath" + index;
-            var paths = Array.from(g.querySelectorAll('path'));
-            paths.forEach(function (p) { return clipPath.append(p.cloneNode(true)); });
-            defs.append(clipPath);
-            g.style.clipPath = "url(" + window.location.href + "#" + clipPath.id + ")";
-        });
-        var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]();
-        svg
-            .attr('width', this.width)
-            .attr('height', this.height)
-            .attr('preserveAspectRatio', 'xMidYMid meet');
-        var drawObj = {
-            isDown: false,
-            dataPoints: [],
-            currentPath: null,
-            color: 0
-        };
-        // svg.on('click', () => {
-        //   const viewBox = svg.attr('viewBox').split(' ');
-        //   const [w, h] = viewBox.slice(2);
-        //   console.log('click: ', d3.event.x, d3.event.y, svg);
-        //   console.log('width: ', w, this.width, d3.event.x * (+w / this.width) - 20);
-        //   console.log('height: ', h, this.height, d3.event.y * (+h / this.height) - 40);
-        //   const ratio = +h / this.height;
-        //   svg.append('circle')
-        //     .style('stroke', 'gray')
-        //     .style('fill', 'white')
-        //     .attr('r', 40)
-        //     .attr('cx', (d3.event.x - this.deltaX - (this.width - +w / ratio) / 2) * ratio)
-        //     .attr('cy', (d3.event.y - this.deltaY - 90 - (this.height - +h / ratio) / 2) * ratio);
-        // });
-        hammertime.on('panstart', function (e) {
-            console.log('panstart...');
-            drawObj.isDown = true;
+        this.zone.runOutsideAngular(function () {
+            _this.myTemplate.nativeElement.innerHTML = _this.svg;
+            _this.groups = Array.from(_this.myTemplate.nativeElement.querySelectorAll('svg>g'));
+            _this.color = 'red';
             _this.group = null;
-            var el = e.target;
-            // debugger;
-            while (el) {
-                if (el.tagName === 'g') {
-                    _this.group = d3__WEBPACK_IMPORTED_MODULE_2__["select"](el);
+            _this.width = _this.maxWidth;
+            _this.height = _this.maxHeight;
+            var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"]('#coloring svg');
+            var svg1 = _this.myTemplate.nativeElement.querySelector('svg');
+            var element = _this.myTemplate.nativeElement;
+            var hammertime = new hammerjs__WEBPACK_IMPORTED_MODULE_3__(element, {});
+            hammertime.get('pinch').set({ enable: true });
+            hammertime.get('press').set({ time: 50 });
+            var pinchStart = { x: null, y: null };
+            var lastEvent = null;
+            var minScale = 0.5;
+            var maxScale = 4;
+            var viewBox = svg.attr('viewBox').split(' ');
+            var _a = viewBox.slice(2), w = _a[0], h = _a[1];
+            var originalSize = {
+                width: _this.width,
+                height: _this.height
+            };
+            var current = {
+                x: 0,
+                y: 0,
+                z: 1,
+                zooming: false,
+                panning: false,
+                width: originalSize.width * 1,
+                height: originalSize.height * 1,
+            };
+            var last = {
+                x: current.x,
+                y: current.y,
+                z: current.z
+            };
+            element.style.transform = 'translate3d(' + current.x + 'px, ' + current.y + 'px, 0) scale(' + current.z + ')';
+            function getRelativePosition(el, point, oSize, scale) {
+                var domCoords = getCoords(el);
+                var elementX = point.x - domCoords.x;
+                var elementY = point.y - domCoords.y;
+                var relativeX = elementX / (oSize.width * scale / 2) - 1;
+                var relativeY = elementY / (oSize.height * scale / 2) - 1;
+                return { x: relativeX, y: relativeY };
+            }
+            function getCoords(elem) {
+                var box = elem.getBoundingClientRect();
+                var body = document.body;
+                var docEl = document.documentElement;
+                var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+                var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+                var clientTop = docEl.clientTop || body.clientTop || 0;
+                var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+                var top = box.top + scrollTop - clientTop;
+                var left = box.left + scrollLeft - clientLeft;
+                return { x: Math.round(left), y: Math.round(top) };
+            }
+            function scaleFrom(zoomOrigin, cScale, newScale) {
+                var currentShift = getCoordinateShiftDueToScale(originalSize, cScale);
+                var newShift = getCoordinateShiftDueToScale(originalSize, newScale);
+                var zoomDistance = newScale - cScale;
+                var shift = {
+                    x: currentShift.x - newShift.x,
+                    y: currentShift.y - newShift.y,
+                };
+                var output = {
+                    x: zoomOrigin.x * shift.x,
+                    y: zoomOrigin.y * shift.y,
+                    z: zoomDistance
+                };
+                return output;
+            }
+            function getCoordinateShiftDueToScale(size, scale) {
+                var newWidth = scale * size.width;
+                var newHeight = scale * size.height;
+                var dx = (newWidth - size.width) / 2;
+                var dy = (newHeight - size.height) / 2;
+                return {
+                    x: dx,
+                    y: dy
+                };
+            }
+            hammertime.on('doubletap', function (e) {
+                // let scaleFactor = 1;
+                // if (current.zooming === false) {
+                //     current.zooming = true;
+                // } else {
+                //     current.zooming = false;
+                //     scaleFactor = -scaleFactor;
+                // }
+                // element.style.transition = '0.3s';
+                // setTimeout(function() {
+                //     element.style.transition = 'none';
+                // }, 300);
+                // const zoomOrigin = getRelativePosition(element, { x: e.center.x, y: e.center.y }, originalSize, current.z);
+                // const d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor);
+                // current.x += d.x;
+                // current.y += d.y;
+                // current.z += d.z;
+                // last.x = current.x;
+                // last.y = current.y;
+                // last.z = current.z;
+                // update();
+            });
+            hammertime.on('pinch', function (e) {
+                if (current.panning || e.pointers.length !== 2) {
+                    return;
                 }
-                el = el.parentElement;
-            }
-            if (_this.group) {
-                var viewBox = svg.attr('viewBox').split(' ');
-                var _a = viewBox.slice(2), w = _a[0], h = _a[1];
-                var ratio = +h / _this.height;
-                var x = (e.center.x - _this.deltaX - (_this.width - +w / ratio) / 2) * ratio;
-                var y = (e.center.y - _this.deltaY - 90 - (_this.height - +h / ratio) / 2) * ratio;
-                drawObj.dataPoints.push([x, y], [x + 50, y + 50]);
-                if (!drawObj.currentPath) {
-                    drawObj.currentPath = _this.group.append('path')
-                        .attr('class', 'currentPath')
-                        .style('stroke-width', 50)
-                        .style('stroke', _this.color)
-                        .style('fill', 'none');
+                current.zooming = true;
+                var scale = Math.max(minScale, Math.min(maxScale, last.z * e.scale));
+                var d = scaleFrom(pinchZoomOrigin, last.z, scale);
+                current.x = d.x + last.x + e.deltaX;
+                current.y = d.y + last.y + e.deltaY;
+                current.z = d.z + last.z;
+                lastEvent = 'pinch';
+                update();
+            });
+            var pinchZoomOrigin = null;
+            hammertime.on('pinchstart', function (e) {
+                if (e.pointers.length !== 2) {
+                    return;
                 }
-                drawObj.currentPath
-                    .datum(drawObj.dataPoints)
-                    .attr('d', line);
+                current.zooming = true;
+                pinchStart.x = e.center.x;
+                pinchStart.y = e.center.y;
+                pinchZoomOrigin = getRelativePosition(element, { x: pinchStart.x, y: pinchStart.y }, originalSize, current.z);
+                lastEvent = 'pinchstart';
+            });
+            hammertime.on('pinchend', function (e) {
+                // this.logs.push('pinchend');
+                setTimeout(function () { return current.zooming = false; }, 150);
+                last.x = current.x;
+                last.y = current.y;
+                last.z = current.z;
+                lastEvent = 'pinchend';
+            });
+            var pinchFrame;
+            function update() {
+                // window.cancelAnimationFrame(pinchFrame);
+                //   pinchFrame = window.requestAnimationFrame(() => {
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                element.style.transform = 'translate3d(' + current.x + 'px, ' + current.y + 'px, 0) scale(' + current.z + ')';
+                // });
             }
-        });
-        hammertime.on('pan', function (e) {
-            console.log('pan...');
-            if (drawObj.isDown && _this.group) {
-                var viewBox = svg.attr('viewBox').split(' ');
-                var _a = viewBox.slice(2), w = _a[0], h = _a[1];
-                var ratio = +h / _this.height;
-                var x = (e.center.x - _this.deltaX - (_this.width - +w / ratio) / 2) * ratio;
-                var y = (e.center.y - _this.deltaY - 90 - (_this.height - +h / ratio) / 2) * ratio;
-                drawObj.dataPoints.push([x, y]);
-                if (!drawObj.currentPath) {
-                    drawObj.currentPath = _this.group.append('path')
-                        .attr('class', 'currentPath')
-                        .style('stroke-width', 100)
-                        .style('stroke', _this.color)
-                        .style('fill', 'none');
+            var defs = svg1.querySelector('svg>defs');
+            if (!defs) {
+                defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                svg1.append(defs);
+            }
+            _this.groups.forEach(function (g, index) {
+                var clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+                clipPath.id = "clipPath" + index;
+                var paths = Array.from(g.querySelectorAll('path'));
+                paths.forEach(function (p) { return clipPath.append(p.cloneNode(true)); });
+                defs.append(clipPath);
+                g.style.clipPath = "url(" + window.location.href + "#" + clipPath.id + ")";
+            });
+            var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]();
+            svg
+                .attr('preserveAspectRatio', 'xMidYMid meet');
+            var drawObj = {
+                isDown: false,
+                dataPoints: [],
+                currentPath: null,
+                color: 0
+            };
+            // hammertime.on('panstart', (e) => {
+            //   if (!current.zooming) {
+            //     current.panning = true;
+            //     this.logs.push('panstart');
+            //   }
+            // });
+            // hammertime.on('pan', (e) => {
+            //   if (!current.zooming && current.panning) {
+            //     this.logs.push('pan');
+            //   }
+            // });
+            // hammertime.on('panend', (e) => {
+            //   if (!current.zooming && current.panning) {
+            //     current.panning = false;
+            //     setTimeout(() => current.panning = false, 1000);
+            //     this.logs.push('panend');
+            //   }
+            // });
+            hammertime.on('panstart', function (e) {
+                if (current.zooming) {
+                    return;
                 }
-                drawObj.currentPath
-                    .datum(drawObj.dataPoints)
-                    .attr('d', line);
-            }
-        });
-        hammertime.on('panend', function (e) {
-            console.log('panend...');
-            drawObj.isDown = false;
-            drawObj.currentPath.attr('class', 'oldPath');
-            drawObj.dataPoints = [];
-            drawObj.currentPath = null;
-            if (++drawObj.color > 19) {
-                drawObj.color = 0;
-            }
+                current.panning = true;
+                drawObj.isDown = true;
+                _this.group = null;
+                var el = e.target;
+                while (el) {
+                    if (el.tagName === 'g') {
+                        _this.group = d3__WEBPACK_IMPORTED_MODULE_2__["select"](el);
+                    }
+                    el = el.parentElement;
+                }
+                if (_this.group) {
+                    var t = ((svg1.clientHeight * current.z) - svg1.clientHeight);
+                    var x = ((e.center.x - current.x + ((svg1.clientWidth * current.z) - svg1.clientWidth) / 2) / (svg1.clientWidth * current.z)) * +w;
+                    var y = ((e.center.y - current.y + (t / 2) - 90) / (svg1.clientHeight * current.z)) * +h;
+                    drawObj.dataPoints.push([x, y], [x + 50 / current.z, y + 50 / current.z]);
+                    if (!drawObj.currentPath) {
+                        drawObj.currentPath = _this.group.append('path')
+                            .attr('class', 'currentPath')
+                            .style('stroke-width', 50)
+                            .style('stroke', _this.color)
+                            .style('fill', 'none');
+                    }
+                    drawObj.currentPath
+                        .datum(drawObj.dataPoints)
+                        .attr('d', line);
+                }
+            });
+            var anFrame;
+            hammertime.on('pan', function (e) {
+                if (!current.zooming && current.panning && _this.group) {
+                    var t = ((svg1.clientHeight * current.z) - svg1.clientHeight);
+                    var x = ((e.center.x - current.x + ((svg1.clientWidth * current.z) - svg1.clientWidth) / 2) / (svg1.clientWidth * current.z)) * +w;
+                    var y = ((e.center.y - current.y + (t / 2) - 90) / (svg1.clientHeight * current.z)) * +h;
+                    drawObj.dataPoints.push([x, y]);
+                    if (!drawObj.currentPath) {
+                        drawObj.currentPath = _this.group.append('path')
+                            .attr('class', 'currentPath')
+                            .style('stroke-width', 50 / current.z)
+                            .style('stroke', _this.color)
+                            .style('fill', 'none');
+                    }
+                    window.cancelAnimationFrame(anFrame);
+                    anFrame = window.requestAnimationFrame(function () {
+                        drawObj.currentPath
+                            .datum(drawObj.dataPoints)
+                            .attr('d', line);
+                    });
+                }
+            });
+            hammertime.on('panend', function (e) {
+                if (!current.zooming && current.panning) {
+                    current.panning = false;
+                    current.zooming = false;
+                    setTimeout(function () { return current.panning = false; }, 150);
+                    drawObj.isDown = false;
+                    drawObj.currentPath.attr('class', 'oldPath');
+                    drawObj.dataPoints = [];
+                    drawObj.currentPath = null;
+                    if (++drawObj.color > 19) {
+                        drawObj.color = 0;
+                    }
+                }
+            });
         });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1137,6 +1089,12 @@ var SvgComponent = /** @class */ (function () {
     return SvgComponent;
 }());
 
+function simpleKeys(original) {
+    return Object.keys(original).reduce(function (obj, key) {
+        obj[key] = typeof original[key] === 'object' ? '{ ... }' : original[key];
+        return obj;
+    }, {});
+}
 
 
 /***/ }),
