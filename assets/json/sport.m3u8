@@ -1,0 +1,48 @@
+#EXTM3U
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/107/index.m3u8
+#EXTINF:0,Матч! Планета
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/123/index.m3u8
+#EXTINF:0,Матч! Футбол 1
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/124/index.m3u8
+#EXTINF:0,МАТЧ ПРЕМЬЕР
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/519/index.m3u8
+#EXTINF:0,Матч! Футбол 3
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/522/index.m3u8
+#EXTINF:0,Матч! Арена
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/528/index.m3u8
+#EXTINF:0,Матч! Игра
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/529/index.m3u8
+#EXTINF:0,Матч! Футбол 2
+#EXTGRP:спорт
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/530/index.m3u8
+#EXTINF:0,Матч ТВ
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/205/index.m3u8
+#EXTINF:0,Матч! Футбол 3 HD
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/206/index.m3u8
+#EXTINF:0,Матч! Арена HD
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/210/index.m3u8
+#EXTINF:0,Матч! Футбол 2 HD
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/211/index.m3u8
+#EXTINF:0,Матч! HD
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/219/index.m3u8
+#EXTINF:0,МАТЧ ПРЕМЬЕР HD
+#EXTGRP:HD
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/221/index.m3u8
+#EXTINF:0,Футбол 1
+#EXTGRP:українські
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/1109/index.m3u8
+#EXTINF:0,Футбол 2
+#EXTGRP:українські
+http://1c7ad3d9.kablakaka.space/iptv/PNWB94U7BAQW8X/1110/index.m3u8
